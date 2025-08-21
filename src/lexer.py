@@ -40,7 +40,7 @@ class Lexer(sly.Lexer):
 
   INTEGER_LITERAL = r"[0-9]+"
   FLOAT_LITERAL = r"[0-9]*\.[0-9]+"
-  CHAR_LITERAL = r"\'.\'"
+  CHAR_LITERAL = r"\'.\'" 
   STRING_LITERAL = r"\".*\""
 
   # Relational operators
@@ -66,6 +66,10 @@ class Lexer(sly.Lexer):
   @_(r"\n+")
   def ignore_new_line(self, t):
     self.lineno += t.value.count("\n")
+
+  @_(r"/\*(.|\n)*\*/")
+  def ignore_multiline_comment(self, t):
+    self.lineno = t.value.count('\n')
 
   def error(self, t):
     error(f"Illegal character {t.value[0]}", t.lineno)
