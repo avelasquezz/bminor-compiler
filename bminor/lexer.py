@@ -42,8 +42,8 @@ class Lexer(sly.Lexer):
 
   INTEGER_LITERAL = r"[0-9]+"
   FLOAT_LITERAL = r"[0-9]*\.[0-9]+"
-  CHAR_LITERAL = r"\'.\'" 
-  STRING_LITERAL = r"\".*\""
+  CHAR_LITERAL = r"'([\x20-\x7E]|\\([abefnrtv\\'\"]|0x[0-9a-fA-F]{2}))'" 
+  STRING_LITERAL = r"\"[\x20-\x7E]*\""
 
   # Relational operators
   NOT = r"!"
