@@ -9,7 +9,7 @@
 
 - Activate virtual environment:
   - macOS / Linux: `source virtual-environment-name/bin/activate`
-  - Windows (Powershell): `.virtual-environment-name\Scripts\Activate.ps1`
+  - Windows (Powershell): `virtual-environment-name\Scripts\Activate.ps1`
 
 - Install dependencies:
   - At the root of the project: `pip install -r requirements.txt`
