@@ -3,6 +3,7 @@ import sly
 from .errors import error, errors_detected
 from rich.table import Table
 from rich.console import Console 
+from bminor.utils import unescape_char, unescape_string
 
 class Lexer(sly.Lexer):
   tokens = {
@@ -43,7 +44,7 @@ class Lexer(sly.Lexer):
   INTEGER_LITERAL = r"[0-9]+"
   FLOAT_LITERAL = r"[0-9]*\.[0-9]+"
   CHAR_LITERAL = r"'([\x20-\x7E]|\\([abefnrtv\\'\"]|0x[0-9a-fA-F]{2}))'" 
-  STRING_LITERAL = r"\"[\x20-\x7E]*\""
+  STRING_LITERAL = r"\"([^\"\\]|\\.)*\""
 
   # Relational operators
   NOT = r"!"
@@ -72,11 +73,40 @@ class Lexer(sly.Lexer):
   @_(r"/\*(.|\n)*\*/")
   def ignore_multiline_comment(self, token):
     self.lineno += token.value.count('\n')
+  
+  @_(r"[0-9]+")
+  def INTEGER_LITERAL(self, token):
+    token.value = int(token.value)
+    return token
+  
+  @_(r"[0-9]*\.[0-9]+")
+  def FLOAT_LITERAL(self, token):
+    token.value = float(token.value)
+    return token
+  
+  @_(r"'([\x20-\x7E]|\\([abefnrtv\\'\"]|0x[0-9a-fA-F]{2}))'")
+  def CHAR_LITERAL(self, token):
+    inner = token.value[2:-1]
+    
+    try:
+      token.value = unescape_char(inner) 
+    except ValueError as err:
+      error(str(err), token.lineno)
+      token.value = None
+
+    return token
+  
+  @_(r"\"([^\"\\]|\\.)*\"")
+  def STRING_LITERAL(self, token):
+    inner = token.value[1:-1]
+    token.value = unescape_string(inner)
+
+    return token
 
   def error(self, token):
     error(f"Illegal character {token.value[0]}", token.lineno)
     self.index += 1
-
+  
 def tokenize(code):
   lexer = Lexer()
 
@@ -86,7 +116,7 @@ def tokenize(code):
   table.add_column("Line number", justify = "center")
 
   for token in lexer.tokenize(code):
-    table.add_row(token.type, token.value, str(token.lineno))
+    table.add_row(token.type, str(token.value), str(token.lineno))
   
   console = Console()
   console.print(table)
