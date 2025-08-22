@@ -14,12 +14,7 @@ def error(message, lineno = None):
  
 def errors_detected():
   global _errors_detected
-
-  print(
-      f"[red]Errors: {_errors_detected}[/red]" if _errors_detected 
-    else 
-      f"[green]Errors: {_errors_detected}[/green]"
-  )
+  return _errors_detected
 
 def clear_errors():
   global _errors_detected

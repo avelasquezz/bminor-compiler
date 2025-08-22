@@ -117,8 +117,7 @@ def tokenize(code):
 
   for token in lexer.tokenize(code):
     table.add_row(token.type, str(token.value), str(token.lineno))
-  
-  console = Console()
-  console.print(table)
-  
-  errors_detected()
+
+  if errors_detected() == 0:
+    console = Console()
+    console.print(table)
