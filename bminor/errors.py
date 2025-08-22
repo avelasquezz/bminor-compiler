@@ -1,6 +1,7 @@
 # Errors management for B-Minor language
 
 from rich import print 
+from rich.markup import escape
 
 _errors_detected = 0
 
@@ -10,7 +11,7 @@ def error(message, lineno = None):
 
   where = f"{lineno}: " if lineno else ""
 
-  print(f"[red]{where}{message}[/red]")
+  print(f"[red]{escape(where + message)}[/red]")
  
 def errors_detected():
   global _errors_detected
