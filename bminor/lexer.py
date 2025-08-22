@@ -1,6 +1,8 @@
 import sly
 
 from .errors import error, errors_detected
+from rich.table import Table
+from rich.console import Console 
 
 class Lexer(sly.Lexer):
   tokens = {
@@ -78,7 +80,15 @@ class Lexer(sly.Lexer):
 def tokenize(code):
   lexer = Lexer()
 
+  table = Table(show_lines=True)
+  table.add_column("Type", justify="center")
+  table.add_column("Value", justify="center")
+  table.add_column("Line number", justify="center")
+
   for token in lexer.tokenize(code):
-    print(token)
+    table.add_row(token.type, token.value, str(token.lineno))
+  
+  console = Console()
+  console.print(table)
   
   errors_detected()

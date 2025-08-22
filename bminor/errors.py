@@ -1,6 +1,6 @@
 # Errors management for B-Minor language
 
-from rich import print, Table
+from rich import print 
 
 _errors_detected = 0
 
