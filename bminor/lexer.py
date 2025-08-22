@@ -71,7 +71,7 @@ class Lexer(sly.Lexer):
 
   @_(r"/\*(.|\n)*\*/")
   def ignore_multiline_comment(self, token):
-    self.lineno = token.value.count('\n')
+    self.lineno += token.value.count('\n')
 
   def error(self, token):
     error(f"Illegal character {token.value[0]}", token.lineno)
