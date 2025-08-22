@@ -66,15 +66,15 @@ class Lexer(sly.Lexer):
   ignore_cppcomments = r"//.*"
 
   @_(r"\n+")
-  def ignore_new_line(self, t):
-    self.lineno += t.value.count("\n")
+  def ignore_new_line(self, token):
+    self.lineno += token.value.count("\n")
 
   @_(r"/\*(.|\n)*\*/")
-  def ignore_multiline_comment(self, t):
-    self.lineno = t.value.count('\n')
+  def ignore_multiline_comment(self, token):
+    self.lineno = token.value.count('\n')
 
-  def error(self, t):
-    error(f"Illegal character {t.value[0]}", t.lineno)
+  def error(self, token):
+    error(f"Illegal character {token.value[0]}", token.lineno)
     self.index += 1
 
 def tokenize(code):
