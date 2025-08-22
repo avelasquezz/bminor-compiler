@@ -1,10 +1,10 @@
 # Errors management for B-Minor language
 
-from rich import print
+from rich import print, Table
 
 _errors_detected = 0
 
-def error(message, lineno=None):
+def error(message, lineno = None):
   global _errors_detected
   _errors_detected += 1
 

@@ -7,4 +7,4 @@ if __name__ == "__main__":
     print("Usage: python lexer.py filename")
     exit(1)
   
-  tokenize(open(sys.argv[1], encoding="utf-8").read())
+  tokenize(open(sys.argv[1], encoding = "utf-8").read())
