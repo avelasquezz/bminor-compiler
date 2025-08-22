@@ -1,13 +1,10 @@
-from bminor.lexer import Lexer
-from bminor.errors import errors_detected
+from bminor.lexer import tokenize 
 
 if __name__ == "__main__":
-  with open("./tests/scanner/sieve.bminor", "r") as file:
-    code = file.read()
+  import sys
   
-  lexer = Lexer()
-
-  for token in lexer.tokenize(code):
-    print(token)
+  if len(sys.argv) != 2:
+    print("Usage: python lexer.py filename")
+    exit(1)
   
-  errors_detected()
+  tokenize(open(sys.argv[1], encoding="utf-8").read())

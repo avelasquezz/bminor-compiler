@@ -1,6 +1,6 @@
 import sly
 
-from .errors import error
+from .errors import error, errors_detected
 
 class Lexer(sly.Lexer):
   tokens = {
@@ -74,3 +74,11 @@ class Lexer(sly.Lexer):
   def error(self, t):
     error(f"Illegal character {t.value[0]}", t.lineno)
     self.index += 1
+
+def tokenize(code):
+  lexer = Lexer()
+
+  for token in lexer.tokenize(code):
+    print(token)
+  
+  errors_detected()
