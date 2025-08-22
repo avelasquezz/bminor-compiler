@@ -80,10 +80,10 @@ class Lexer(sly.Lexer):
 def tokenize(code):
   lexer = Lexer()
 
-  table = Table(show_lines=True)
-  table.add_column("Type", justify="center")
-  table.add_column("Value", justify="center")
-  table.add_column("Line number", justify="center")
+  table = Table(show_lines = True)
+  table.add_column("Type", justify = "center")
+  table.add_column("Value", justify = "center")
+  table.add_column("Line number", justify = "center")
 
   for token in lexer.tokenize(code):
     table.add_row(token.type, token.value, str(token.lineno))
