@@ -21,6 +21,12 @@ class Lexer(sly.Lexer):
 
   literals = "+-*/%^=()[]{}:;,"
 
+  @_(r"[0-9]+[a-zA-Z][a-zA-Z0-9_]*")
+  def error_invalid_identifier(self, token):
+    error(f"Illegal identiifer: {token.value}", token.lineno)
+    self.index += 1
+  
+
   ID = r"[a-zA-Z_][a-zA-Z0-9_]*" 
 
   ID['array'] = ARRAY
@@ -73,7 +79,7 @@ class Lexer(sly.Lexer):
   @_(r"/\*(.|\n)*\*/")
   def ignore_multiline_comment(self, token):
     self.lineno += token.value.count('\n')
-  
+
   @_(r"[0-9]+")
   def INTEGER_LITERAL(self, token):
     token.value = int(token.value)
@@ -102,7 +108,7 @@ class Lexer(sly.Lexer):
     token.value = unescape_string(inner)
 
     return token
-
+  
   def error(self, token):
     error(f"Illegal character {token.value[0]}", token.lineno)
     self.index += 1
@@ -121,3 +127,6 @@ def tokenize(code):
   if errors_detected() == 0:
     console = Console()
     console.print(table)
+
+  print(errors_detected())
+  
