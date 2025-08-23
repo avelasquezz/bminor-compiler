@@ -8,6 +8,9 @@
  * ========================================================================== *
  */
 
+S: string = "Hello, world!\nMy name is Juan"
+C: char = '\0x41'
+
 N: integer = 100;
 isprime: array [N] boolean;
 
