@@ -86,7 +86,7 @@ class Lexer(sly.Lexer):
   
   @_(r"'([\x20-\x7E]|\\([abefnrtv\\'\"]|0x[0-9a-fA-F]{2}))'")
   def CHAR_LITERAL(self, token):
-    inner = token.value[2:-1]
+    inner = token.value[1:-1]
     
     try:
       token.value = unescape_char(inner) 

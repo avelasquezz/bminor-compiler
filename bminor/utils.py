@@ -19,15 +19,15 @@ def unescape_char(char):
     return escapes[char[1]]
 
   # Hex escape. Example: \0xHH
-  if char.startswith("0x") and len(char) == 4:
+  if char.startswith("\\0x") and len(char) == 5:
     try:
-      value = int(char[2:], 16)
+      value = int(char[3:], 16)
 
-      if value > 126:
+      if value > 126 or value < 32:
         raise ValueError(f"Invalid hex escape: {char}")
-      return chr(int(char[2:], 16))
-    except ValueError:
 
+      return chr(value)
+    except:
       raise ValueError(f"Invalid hex escape: {char}")
 
   # Default error
