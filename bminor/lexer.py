@@ -25,7 +25,6 @@ class Lexer(sly.Lexer):
   def error_invalid_identifier(self, token):
     error(f"Illegal identiifer: {token.value}", token.lineno)
     self.index += 1
-  
 
   ID = r"[a-zA-Z_][a-zA-Z0-9_]*" 
 
