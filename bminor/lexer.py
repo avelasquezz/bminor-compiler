@@ -127,6 +127,3 @@ def tokenize(code):
   if errors_detected() == 0:
     console = Console()
     console.print(table)
-
-  print(errors_detected())
-  
