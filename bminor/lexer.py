@@ -8,15 +8,15 @@ from bminor.utils import unescape_char, unescape_string
 class Lexer(sly.Lexer):
   tokens = {
     # Reserved words
-    ARRAY, AUTO, BOOLEAN, CHAR, ELSE, FALSE, 
-    FLOAT, FOR, FUNCTION, IF, INTEGER, PRINT, 
-    RETURN, STRING, TRUE, VOID, WHILE,
+    "ARRAY", "AUTO", "BOOLEAN", "CHAR", "ELSE", "FALSE", 
+    "FLOAT", "FOR", "FUNCTION", "IF", "INTEGER", "PRINT", 
+    "RETURN", "STRING", "TRUE", "VOID", "WHILE",
 
     # Operators
-    NOT, LT, LE, GT, GE, EQ, NE, LAND, LOR, INC, DEC,
+    "NOT", "LT", "LE", "GT", "GE", "EQ", "NE", "LAND", "LOR", "INC", "DEC",
 
     # Other symbols
-    ID, INTEGER_LITERAL, FLOAT_LITERAL, CHAR_LITERAL, STRING_LITERAL,
+    "ID", "INTEGER_LITERAL", "FLOAT_LITERAL", "CHAR_LITERAL", "STRING_LITERAL",
   }
 
   literals = "+-*/%^=()[]{}:;,"
@@ -28,23 +28,23 @@ class Lexer(sly.Lexer):
 
   ID = r"[a-zA-Z_][a-zA-Z0-9_]*" 
 
-  ID['array'] = ARRAY
-  ID['auto'] = AUTO
-  ID['boolean'] = BOOLEAN
-  ID['char'] = CHAR
-  ID['else'] = ELSE
-  ID['false'] = FALSE
-  ID['float'] = FLOAT
-  ID['for'] = FOR
-  ID['function'] = FUNCTION
-  ID['if'] = IF
-  ID['integer'] = INTEGER
-  ID['print'] = PRINT
-  ID['return'] = RETURN
-  ID['string'] = STRING
-  ID['true'] = TRUE
-  ID['void'] = VOID
-  ID['while'] = WHILE
+  ID['array'] = "ARRAY"
+  ID['auto'] = "AUTO"
+  ID['boolean'] = "BOOLEAN"
+  ID['char'] = "CHAR"
+  ID['else'] = "ELSE"
+  ID['false'] = "FALSE"
+  ID['float'] = "FLOAT"
+  ID['for'] = "FOR"
+  ID['function'] = "FUNCTION"
+  ID['if'] = "IF"
+  ID['integer'] = "INTEGER"
+  ID['print'] = "PRINT"
+  ID['return'] = "RETURN"
+  ID['string'] = "STRING"
+  ID['true'] = "TRUE"
+  ID['void'] = "VOID"
+  ID['while'] = "WHILE"
 
   INTEGER_LITERAL = r"[0-9]+"
   FLOAT_LITERAL = r"[0-9]*\.[0-9]+"
