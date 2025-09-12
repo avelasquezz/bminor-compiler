@@ -25,27 +25,44 @@ class Program(Statement):
 
 @dataclass
 class Type(Expression):
-  name: str
+  pass
+
+class PrimitiveType(Type):
+  name: str = None
 
 @dataclass
-class IntegerType(Type):
+class IntegerType(PrimitiveType):
   def __init__(self): super().__init__("integer")
 
 @dataclass
-class FloatType(Type):
+class FloatType(PrimitiveType):
   def __init__(self): super().__init__("float")
 
 @dataclass
-class StringType(Type):
+class StringType(PrimitiveType):
   def __init__(self): super().__init__("string")
 
 @dataclass
-class CharType(Type):
+class CharType(PrimitiveType):
   def __init__(self): super().__init__("char")
 
 @dataclass
-class BooleanType(Type):
+class BooleanType(PrimitiveType):
   def __init__(self): super().__init__("boolean")
+
+@dataclass
+class VoidType(PrimitiveType):
+  def __init__(self): super().__init__("void")
+
+@dataclass
+class ArrayType(Type):
+  base: Type
+  size: Expression = None
+
+@dataclass
+class FuncType(Type):
+  ret: Type
+  params: List["Param"]
 
 # == Params ==
 
