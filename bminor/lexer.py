@@ -1,6 +1,6 @@
 import sly
 
-from .errors import error, errors_detected
+from bminor.errors import error, errors_detected
 from rich.table import Table
 from rich.console import Console 
 from bminor.utils import unescape_char, unescape_string

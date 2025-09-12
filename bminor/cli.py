@@ -18,7 +18,7 @@ import argparse
 import sys
 
 from rich  import print
-from .lexer import tokenize
+from bminor.lexer import tokenize
 
 def usage(exit_code = 1):
   print("[blue]Usage: main.py --option filename[/blue]", file = sys.stderr)
