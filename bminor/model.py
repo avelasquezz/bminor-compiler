@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List, Union
 
+# == Base nodes ==
+
 @dataclass
 class Statement:
   pass
@@ -13,9 +15,52 @@ class Expression:
 class Declaration:
   pass
 
+# == Program ==
+
 @dataclass
 class Program(Statement):
   body: List[Statement] = field(default_factory = list)
+
+# == Types ==
+
+@dataclass
+class Type(Expression):
+  name: str
+
+@dataclass
+class IntegerType(Type):
+  def __init__(self): super().__init__("integer")
+
+@dataclass
+class FloatType(Type):
+  def __init__(self): super().__init__("float")
+
+@dataclass
+class StringType(Type):
+  def __init__(self): super().__init__("string")
+
+@dataclass
+class CharType(Type):
+  def __init__(self): super().__init__("char")
+
+@dataclass
+class BooleanType(Type):
+  def __init__(self): super().__init__("boolean")
+
+# == Params ==
+
+@dataclass
+class Param:
+  name: str
+  type: Expression
+
+@dataclass
+class VarParam(Param):
+  pass
+
+@dataclass
+class ArrayParam(Param):
+  size: Expression = None
 
 # == Declarations ==
 
@@ -31,19 +76,6 @@ class ArrayDecl(Declaration):
   type: Expression
   size: Expression
   value: List[Expression] = field(default_factory = list)
-
-@dataclass
-class Param:
-  name: str
-  type: Expression
-
-@dataclass
-class VarParam(Param):
-  pass
-
-@dataclass
-class ArrayParam(Param):
-  size: Expression = None
 
 @dataclass
 class FuncDecl(Declaration):
@@ -79,7 +111,7 @@ class PrintStmt(Statement):
 class BlockStmt(Statement):
   body: List[Statement] = field(default_factory = list)
 
-# == Assignments ==
+# == Location / Assignments ==
 
 @dataclass
 class Location(Expression):
@@ -111,6 +143,8 @@ class BinOper(Expression):
 class UnaryOper(Expression):
   oper: str
   expr: Expression
+
+# == Literals ==
 
 @dataclass
 class Literal(Expression):
