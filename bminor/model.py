@@ -29,38 +29,31 @@ class Type(Expression):
 
 @dataclass
 class PrimitiveType(Type):
-  name: str
+  pass 
 
 @dataclass
 class IntegerType(PrimitiveType):
-  def __post_init__(self):
-    self.name = "integer"
+  pass
 
 @dataclass
 class FloatType(PrimitiveType):
-  def __post_init__(self):
-    self.name = "float"
+  pass
 
 @dataclass
 class StringType(PrimitiveType):
-  def __post_init__(self):
-    self.name = "string"
+  pass
 
 @dataclass
 class CharType(PrimitiveType):
-  def __post_init__(self):
-    self.name = "char"
+  pass
 
 @dataclass
 class BooleanType(PrimitiveType):
-  def __post_init__(self):
-    self.name = "boolean"
+  pass
 
 @dataclass
 class VoidType(PrimitiveType):
-  def __post_init__(self):
-    self.name = "void"
-
+  pass
 
 @dataclass
 class ArrayType(Type):
@@ -99,7 +92,6 @@ class VarDecl(Declaration):
 class ArrayDecl(Declaration):
   name: str
   type: Expression
-  size: Expression
   value: List[Expression] = field(default_factory = list)
 
 @dataclass
@@ -174,7 +166,6 @@ class UnaryOper(Expression):
 @dataclass
 class Literal(Expression):
   value: Union[int, float, str, bool]
-  type: str = None
 
 @dataclass
 class Integer(Literal):
@@ -182,7 +173,6 @@ class Integer(Literal):
 
   def __post_init__(self):
     assert isinstance(self.value, int), "Value must be an integer"
-    self.type = "integer"
 
 @dataclass
 class Float(Literal):
@@ -190,7 +180,6 @@ class Float(Literal):
 
   def __post_init__(self):
     assert isinstance(self.value, float), "Value must be a float"
-    self.type = "float"
 
 @dataclass
 class String(Literal):
@@ -198,7 +187,6 @@ class String(Literal):
 
   def __post_init__(self):
     assert isinstance(self.value, str), "Value must be a string"
-    self.type = "string"
 
 @dataclass
 class Char(Literal):
@@ -206,7 +194,6 @@ class Char(Literal):
 
   def __post_init__(self):
     assert isinstance(self.value, str) and len(self.value) == 1, "Value must be a char"
-    self.type = "char"
 
 @dataclass
 class Boolean(Literal):
@@ -214,7 +201,6 @@ class Boolean(Literal):
 
   def __post_init__(self):
     assert isinstance(self.value, bool), "Value must be a boolean"
-    self.type = "boolean"
 
 @dataclass
 class Increment(Expression):
