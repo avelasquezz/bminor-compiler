@@ -27,32 +27,40 @@ class Program(Statement):
 class Type(Expression):
   pass
 
+@dataclass
 class PrimitiveType(Type):
-  name: str = None
+  name: str
 
 @dataclass
 class IntegerType(PrimitiveType):
-  def __init__(self): super().__init__("integer")
+  def __post_init__(self):
+    self.name = "integer"
 
 @dataclass
 class FloatType(PrimitiveType):
-  def __init__(self): super().__init__("float")
+  def __post_init__(self):
+    self.name = "float"
 
 @dataclass
 class StringType(PrimitiveType):
-  def __init__(self): super().__init__("string")
+  def __post_init__(self):
+    self.name = "string"
 
 @dataclass
 class CharType(PrimitiveType):
-  def __init__(self): super().__init__("char")
+  def __post_init__(self):
+    self.name = "char"
 
 @dataclass
 class BooleanType(PrimitiveType):
-  def __init__(self): super().__init__("boolean")
+  def __post_init__(self):
+    self.name = "boolean"
 
 @dataclass
 class VoidType(PrimitiveType):
-  def __init__(self): super().__init__("void")
+  def __post_init__(self):
+    self.name = "void"
+
 
 @dataclass
 class ArrayType(Type):
