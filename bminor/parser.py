@@ -2,6 +2,9 @@ import sly
 
 from bminor.lexer import Lexer
 from bminor.model import *
+from rich.tree import Tree
+from rich import print
+from dataclasses import is_dataclass, fields
 
 def _L(node, lineno):
   node.lineno = lineno
@@ -45,6 +48,10 @@ class Parser(sly.Parser):
   def type_simple(self, p):
     return _L(BooleanType(), p.lineno)
   
+  @_("VOID")
+  def type_simple(self, p):
+    return _L(VoidType(), p.lineno)
+  
   # Array types (solo con tamaño opcional)
   @_("ARRAY '[' opt_expr ']' type_simple")
   def type_array_sized(self, p):
@@ -75,7 +82,7 @@ class Parser(sly.Parser):
   @_("ID ':' type_func ';'")
   def decl(self, p):
     func_type: FuncType = p.type_func
-    return _L(FuncDecl(name=p.ID, type=func_type, params=func_type.params, body=[]), p.lineno)
+    return _L(FuncDecl(name=p.ID, type=func_type, body=[]), p.lineno)
   
   # decl_init
   @_("ID ':' type_simple '=' expr ';'")
@@ -89,7 +96,7 @@ class Parser(sly.Parser):
   @_("ID ':' type_func '=' '{' opt_stmt_list '}' ';'")
   def decl(self, p):
     func_type: FuncType = p.type_func
-    return _L(FuncDecl(name=p.ID, type=func_type, params=func_type.params, body=p.opt_stmt_list), p.lineno)
+    return _L(FuncDecl(name=p.ID, type=func_type, body=p.opt_stmt_list), p.lineno)
   
   # == Statements ==
   @_("stmt_list")
@@ -110,19 +117,44 @@ class Parser(sly.Parser):
   
   @_("open_stmt")
   @_("closed_stmt")
+  @_("decl")
   def stmt(self, p):
     return p[0]
 
   @_("if_stmt_closed")
   @_("for_stmt_closed")
+  @_("while_stmt_closed")
+  @_("do_while_stmt_closed")
   @_("simple_stmt")
   def closed_stmt(self, p):
     return p[0]
 
   @_("if_stmt_open")
   @_("for_stmt_open")
+  @_("while_stmt_open")
+  @_("do_while_stmt_open")
   def open_stmt(self, p):
     return p[0]
+
+  @_("WHILE '(' opt_expr ')'")
+  def while_cond(self, p):
+    return p.opt_expr
+  
+  @_("while_cond closed_stmt")
+  def while_stmt_closed(self, p):
+    return _L(WhileStmt(condition=p.while_cond, body=p.close_stmt), p.lineno)
+
+  @_("while_cond stmt")
+  def while_stmt_open(self, p):
+    return _L(WhileStmt(condition=p.while_cond, body=p.stmt), p.lineno)
+
+  @_("DO closed_stmt while_cond")
+  def do_while_stmt_closed(self, p):
+    return _L(DoWhileStmt(body=p.closed_stmt, condition=p.while_cond), p.lineno)
+
+  @_("DO stmt while_cond")
+  def do_while_stmt_open(self, p):
+    return _L(DoWhileStmt(body=p.stmt, condition=p.while_cond), p.lineno)
   
   @_("IF '(' opt_expr ')'")
   def if_cond(self, p):
@@ -160,13 +192,7 @@ class Parser(sly.Parser):
   @_("block_stmt")
   @_("expr ';'")
   def simple_stmt(self, p):
-    if hasattr(p, "print_stmt"):
-      return p.print_stmt
-    if hasattr(p, "return_stmt"):
-      return p.return_stmt
-    if hasattr(p, "block_stmt"):
-      return p.block_stmt
-    return p.expr
+    return p[0]
 
   @_("RETURN opt_expr ';'")
   def return_stmt(self, p):
@@ -208,7 +234,27 @@ class Parser(sly.Parser):
   @_("expr1")
   def expr(self, p):
     return p.expr1
-  
+
+  @_('lval INC')
+  def expr(self, p):
+    return _L(UnaryOper(oper="++", expr=p.lval), p.lineno)
+
+  @_('lval DEC')
+  def expr(self, p):
+    return _L(UnaryOper(oper="--", expr=p.lval), p.lineno)
+
+  @_('INC lval')
+  def expr(self, p):
+    return _L(UnaryOper(oper="++", expr=p.lval), p.lineno)
+
+  @_('DEC lval')
+  def expr(self, p):
+    return _L(UnaryOper(oper="--", expr=p.lval), p.lineno)
+
+  @_("ID '[' expr ']'")
+  def expr(self, p):
+    return _L(ArrayLoc(name=p.ID, index=p.expr), p.lineno)
+
   @_("lval '=' expr1")
   def expr1(self, p):
     return _L(Assignment(target=p.lval, value=p.expr1), p.lineno)
@@ -302,6 +348,10 @@ class Parser(sly.Parser):
   def expr9(self, p):
     return _L(VarLoc(name=p.ID), p.lineno)
 
+  @_("ID '[' expr ']'")
+  def expr9(self, p):
+    return _L(ArrayLoc(name=p.ID, index=p.expr), p.lineno)
+
   # == Literals ==
   @_("INTEGER_LITERAL")
   def expr9(self, p):
@@ -371,3 +421,36 @@ def parse(code):
   l = Lexer()
   p = Parser()
   return p.parse(l.tokenize(code))
+
+def ast_to_tree(node, name="root"):
+  label = f"[bold blue]{name}[/]"
+
+  if is_dataclass(node):
+    tree = Tree(f"{label} [cyan]{node.__class__.__name__}[/]")
+
+    for f in fields(node):
+      value = getattr(node, f.name)
+
+      if is_dataclass(value) or isinstance(value, (list, tuple)):
+        subtree = ast_to_tree(value, f.name)
+        tree.add(subtree)
+      else:
+        tree.add(f"[green]{f.name}[/] = [yellow]{value}[/]")
+    return tree
+
+  elif isinstance(node, list):
+    tree = Tree(f"{label} [magenta]list[/]")
+    for i, item in enumerate(node):
+      subtree = ast_to_tree(item, f"[{i}]")
+      tree.add(subtree)
+    return tree
+
+  elif isinstance(node, tuple):
+    tree = Tree(f"{label} [magenta]tuple[/]")
+    for i, item in enumerate(node):
+      subtree = ast_to_tree(item, f"[{i}]")
+      tree.add(subtree)
+    return tree
+
+  else:
+    return Tree(f"{label} = [yellow]{repr(node)}[/]")

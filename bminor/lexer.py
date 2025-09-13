@@ -10,7 +10,7 @@ class Lexer(sly.Lexer):
     # Reserved words
     "ARRAY", "AUTO", "BOOLEAN", "CHAR", "ELSE", "FALSE", 
     "FLOAT", "FOR", "FUNCTION", "IF", "INTEGER", "PRINT", 
-    "RETURN", "STRING", "TRUE", "VOID", "WHILE",
+    "RETURN", "STRING", "TRUE", "VOID", "WHILE", "DO",
 
     # Operators
     "NOT", "LT", "LE", "GT", "GE", "EQ", "NE", "LAND", "LOR", "INC", "DEC",
@@ -32,6 +32,7 @@ class Lexer(sly.Lexer):
   ID['auto'] = "AUTO"
   ID['boolean'] = "BOOLEAN"
   ID['char'] = "CHAR"
+  ID['do'] = "DO"
   ID['else'] = "ELSE"
   ID['false'] = "FALSE"
   ID['float'] = "FLOAT"
@@ -53,12 +54,12 @@ class Lexer(sly.Lexer):
 
   # Relational operators
   NOT = r"!"
-  LT = r"<"
   LE = r"<=" 
-  GT = r">"
   GE = r">="
-  EQ = r"=="
+  LT = r"<"
+  GT = r">"
   NE = r"!="
+  EQ = r"=="
 
   # Logical operators
   LAND = r"&&"

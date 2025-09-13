@@ -98,7 +98,6 @@ class ArrayDecl(Declaration):
 class FuncDecl(Declaration):
   name: str
   type: Expression
-  params: List[Param]
   body: List[Statement] = field(default_factory = list)
 
 # == Statements ==
@@ -115,6 +114,17 @@ class ForStmt(Statement):
   condition: Expression = None
   incr: Expression = None
   body: Statement = None
+
+@dataclass
+class WhileStmt(Statement):
+  condition: Expression = None
+  body: Statement = None
+
+@dataclass
+class DoWhileStmt(Statement):
+  body: Statement = None
+  condition: Expression = None
+
 
 @dataclass
 class ReturnStmt(Statement):

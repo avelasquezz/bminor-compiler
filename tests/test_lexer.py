@@ -131,4 +131,3 @@ def test_function_definition_error():
   tokens = lex(code)
   assert ("@", "@", 2) not in tokens
   assert errors_detected() > 0
-  
