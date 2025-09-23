@@ -1,18 +1,26 @@
 from dataclasses import dataclass, field
 from typing import List, Union
+from multimethod import multimeta 
+
+class Visitor(metaclass = multimeta):
+  pass
 
 # == Base nodes ==
 
+class Node:
+  def accept(self, v : Visitor, *args, **kwargs):
+    return v.visit(self, *args, **kwargs)
+
 @dataclass
-class Statement:
+class Statement(Node):
   pass
 
 @dataclass
-class Expression:
+class Expression(Node):
   pass
 
 @dataclass
-class Declaration:
+class Declaration(Node):
   pass
 
 # == Program ==
