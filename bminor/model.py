@@ -76,7 +76,7 @@ class FuncType(Type):
 # == Params ==
 
 @dataclass
-class Param:
+class Param(Expression):
   name: str
   type: Expression
 
