@@ -22,7 +22,7 @@ in_mandelbrot: function boolean (x0: float, y0: float, n: integer) = {
     temp: float;
 
     while (n > 0) {
-        xtem = x*x - y*y + x0;
+        temp = x*x - y*y + x0;
         y = 2.0*x*y + y0;
         x = temp;
         n--;
