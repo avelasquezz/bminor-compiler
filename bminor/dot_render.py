@@ -171,13 +171,20 @@ class ASTPrinter(Visitor):
   
   def visit(self, n: Literal):
     name = self.name
+    literal_type = self.name
+    literal_value = self.name
 
-    if n.value == '\n':
-      label = r"Literal: '\\n'"
+    if isinstance(n.value, str) and n.value == '\n':
+      value = r"'\\n'"
     else:
-      label = f"Literal: {n.value}"
+      value = n.value
 
-    self.dot.node(name, label=label, color=self.color_defaults[1])
+    self.dot.node(name, label="Literal", color=self.color_defaults[1])
+    self.dot.node(literal_type, label=n.type)
+    self.dot.node(literal_value, label=str(n.value))
+
+    self.dot.edge(name, literal_type)
+    self.dot.edge(name, literal_value)
 
     return name
   
