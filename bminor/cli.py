@@ -19,6 +19,8 @@ import sys
 
 from rich  import print
 from bminor.lexer import tokenize
+from bminor.parser import parse, ast_to_tree
+from bminor.dot_render import ASTPrinter
 
 def usage(exit_code = 1):
   print("[blue]Usage: main.py --option filename[/blue]", file = sys.stderr)
@@ -54,6 +56,13 @@ def parse_args():
     help = 'Store output to lexer'
   )
 
+  mutex.add_argument(
+    '--dot',
+    action = 'store_true',
+    default = False,
+    help = 'Generate AST graph as DOT format'
+  )
+
   return cli.parse_args()
 
 def main():
@@ -74,6 +83,18 @@ def main():
 
       if args.scan:
         tokenize(source)
+      elif args.dot:
+        print(f"[bold]Source code: [magenta]{filename}[/]\n")
+        ast = parse(source)
+  
+        tree = ast_to_tree(ast)
+        print(tree)
+
+        dot = ASTPrinter.render(ast)
+        dot.render("ast.dot")
+
+        print(f"\n[bold]The AST graph as dot format was created as [blue]./ast.dot[/] and it can be viewed in [blue]./ast.dot.pdf[/]\n")
+
   except:
     print(f'[red]I/O error:[/red]', file = sys.stderr)
 
