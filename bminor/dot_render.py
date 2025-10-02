@@ -173,9 +173,9 @@ class ASTPrinter(Visitor):
     name = self.name
 
     if n.value == '\n':
-        label = r"Literal: '\\n'"
+      label = r"Literal: '\\n'"
     else:
-        label = f"Literal: {n.value}"
+      label = f"Literal: {n.value}"
 
     self.dot.node(name, label=label, color=self.color_defaults[1])
 
