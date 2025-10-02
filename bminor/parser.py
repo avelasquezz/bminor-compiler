@@ -355,33 +355,33 @@ class Parser(sly.Parser):
   # == Literals ==
   @_("INTEGER_LITERAL")
   def expr9(self, p):
-    return _L(Integer(value=int(p.INTEGER_LITERAL)), p.lineno)
+    return _L(Literal(value=int(p.INTEGER_LITERAL), type="integer"), p.lineno)
 
   @_("FLOAT_LITERAL")
   def expr9(self, p):
-    return _L(Float(value=float(p.FLOAT_LITERAL)), p.lineno)
+    return _L(Literal(value=float(p.FLOAT_LITERAL), type="float"), p.lineno)
   
   @_("STRING_LITERAL")
   def expr9(self, p):
     value = p.STRING_LITERAL
     if len(value) >= 2 and value[0] == '"' and value[-1] == value[0]:
       value = value[1:-1]
-    return _L(String(value=value), p.lineno)
+    return _L(Literal(value=value, type="string"), p.lineno)
 
   @_("CHAR_LITERAL")
   def expr9(self, p):
     value = p.CHAR_LITERAL
     if len(value) >= 2 and value[0] == "'" and value[-1] == value[0]:
       value = value[1:-1]
-    return _L(Char(value=value), p.lineno)
+    return _L(Literal(value=value, type="char"), p.lineno)
   
   @_("TRUE")
   def expr9(self, p):
-    return _L(Boolean(value=True), p.lineno)
+    return _L(Literal(value=True, type="boolean"), p.lineno)
 
   @_("FALSE")
   def expr9(self, p):
-    return _L(Boolean(value=False), p.lineno)
+    return _L(Literal(value=False, type="boolean"), p.lineno)
   
   # == Parameters ==  
   @_("empty")
