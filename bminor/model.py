@@ -183,41 +183,7 @@ class UnaryOper(Expression):
 @dataclass
 class Literal(Expression):
   value: Union[int, float, str, bool]
-
-@dataclass
-class Integer(Literal):
-  value: int
-
-  def __post_init__(self):
-    assert isinstance(self.value, int), "Value must be an integer"
-
-@dataclass
-class Float(Literal):
-  value: float 
-
-  def __post_init__(self):
-    assert isinstance(self.value, float), "Value must be a float"
-
-@dataclass
-class String(Literal):
-  value: str
-
-  def __post_init__(self):
-    assert isinstance(self.value, str), "Value must be a string"
-
-@dataclass
-class Char(Literal):
-  value: str
-
-  def __post_init__(self):
-    assert isinstance(self.value, str) and len(self.value) == 1, "Value must be a char"
-
-@dataclass
-class Boolean(Literal):
-  value: bool
-
-  def __post_init__(self):
-    assert isinstance(self.value, bool), "Value must be a boolean"
+  type: str
 
 @dataclass
 class Increment(Expression):
