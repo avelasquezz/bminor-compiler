@@ -29,50 +29,6 @@ class Declaration(Node):
 class Program(Statement):
   body: List[Statement] = field(default_factory = list)
 
-# == Types ==
-
-@dataclass
-class Type(Expression):
-  pass
-
-@dataclass
-class PrimitiveType(Type):
-  pass 
-
-@dataclass
-class IntegerType(PrimitiveType):
-  pass
-
-@dataclass
-class FloatType(PrimitiveType):
-  pass
-
-@dataclass
-class StringType(PrimitiveType):
-  pass
-
-@dataclass
-class CharType(PrimitiveType):
-  pass
-
-@dataclass
-class BooleanType(PrimitiveType):
-  pass
-
-@dataclass
-class VoidType(PrimitiveType):
-  pass
-
-@dataclass
-class ArrayType(Type):
-  base: Type
-  size: Expression = None
-
-@dataclass
-class FuncType(Type):
-  ret: Type
-  params: List["Param"]
-
 # == Params ==
 
 @dataclass
@@ -93,19 +49,21 @@ class ArrayParam(Param):
 @dataclass
 class VarDecl(Declaration):
   name: str
-  type: Expression
+  type: str 
   value: Expression = None
 
 @dataclass
 class ArrayDecl(Declaration):
   name: str
-  type: Expression
+  base: str
+  size: Expression = None
   value: List[Expression] = field(default_factory = list)
 
 @dataclass
 class FuncDecl(Declaration):
   name: str
-  type: Expression
+  type: str
+  params: List[Param] = field(default_factory = list)
   body: List[Statement] = field(default_factory = list)
 
 # == Statements ==
