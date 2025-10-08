@@ -9,7 +9,7 @@ def error(message, lineno = None, error_type = None):
   global _errors_detected
   _errors_detected += 1
 
-  print(f"[red][bold]{error_type if error_type else ""} Error at {lineno}: [/]{message}[/]")
+  print(f"[red][bold]{error_type + " " if error_type else ""}Error at {lineno}: [/]{message}[/]")
  
 def errors_detected():
   global _errors_detected
