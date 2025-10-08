@@ -50,9 +50,12 @@ class ASTPrinter(Visitor):
   
   def visit(self, n: VarDecl):
     name = self.name
-    self.dot.node(name, label=f"VarDecl: {n.name}")
+    var_type = self.name
 
-    self.dot.edge(name, n.type.accept(self))
+    self.dot.node(name, label=f"VarDecl: {n.name}")
+    self.dot.node(var_type, label=f"Type: {n.type}")
+
+    self.dot.edge(name, var_type)
 
     if n.value:
       self.dot.edge(name, n.value.accept(self))
@@ -61,10 +64,12 @@ class ASTPrinter(Visitor):
   
   def visit(self, n: ArrayDecl):
     name = self.name
+    array_type = self.name
 
     self.dot.node(name, label=f"ArrayDecl: {n.name}")
+    self.dot.node(array_type, label=f"Type: {n.type}")
 
-    self.dot.edge(name, n.type.accept(self))
+    self.dot.edge(name, array_type)
 
     for value in n.value:
       self.dot.edge(name, value.accept(self))
@@ -73,38 +78,16 @@ class ASTPrinter(Visitor):
 
   def visit(self, n: FuncDecl):
     name = self.name
+    function_type = self.name
 
     self.dot.node(name, label=f"FuncDecl: {n.name}")
+    self.dot.node(function_type, label=f"Type: {n.type}")
 
-    self.dot.edge(name, n.type.accept(self))
+    self.dot.edge(name, function_type)
 
     for stmt in n.body:
       self.dot.edge(name, stmt.accept(self))
 
-    return name
-  
-  def visit(self, n: ArrayType):
-    name = self.name
-
-    self.dot.node(name, label=f"ArrayType")
-
-    self.dot.edge(name, n.base.accept(self))
-
-    if n.size:
-      self.dot.edge(name, n.size.accept(self))
-
-    return name
-  
-  def visit(self, n: FuncType):
-    name = self.name
-
-    self.dot.node(name, label=f"FuncType")
-
-    self.dot.edge(name, n.ret.accept(self))
-
-    for param in n.params:
-      self.dot.edge(name, param.accept(self))
-    
     return name
   
   def visit(self, n: VarParam):
@@ -180,7 +163,7 @@ class ASTPrinter(Visitor):
       value = n.value
 
     self.dot.node(name, label="Literal", color=self.color_defaults[1])
-    self.dot.node(literal_type, label=n.type)
+    self.dot.node(literal_type, label=f"Type: {n.type}")
     self.dot.node(literal_value, label=str(n.value))
 
     self.dot.edge(name, literal_type)
@@ -275,12 +258,6 @@ class ASTPrinter(Visitor):
 
     return name
 
-  def visit(self, n: Type):
-    name = self.name
-    self.dot.node(name, label=n.__class__.__name__)
-
-    return name
-  
   def visit(self, n: Node):
     name = self.name
     print(n.__class__.__name__)
