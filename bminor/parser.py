@@ -30,45 +30,45 @@ class Parser(sly.Parser):
   # == Types ==
   @_("INTEGER")
   def type_simple(self, p):
-    return _L(IntegerType(), p.lineno)
+    return "integer"
 
   @_("FLOAT")
   def type_simple(self, p):
-    return _L(FloatType(), p.lineno)
+    return "float" 
 
   @_("STRING")
   def type_simple(self, p):
-    return _L(StringType(), p.lineno)
+    return "string"
 
   @_("CHAR")
   def type_simple(self, p):
-    return _L(CharType(), p.lineno)
+    return "char"
 
   @_("BOOLEAN")
   def type_simple(self, p):
-    return _L(BooleanType(), p.lineno)
+    return "boolean"
   
   @_("VOID")
   def type_simple(self, p):
-    return _L(VoidType(), p.lineno)
+    return "void" 
   
   # Array types (solo con tamaño opcional)
   @_("ARRAY '[' opt_expr ']' type_simple")
   def type_array_sized(self, p):
-    return _L(ArrayType(base=p.type_simple, size=p.opt_expr), p.lineno)
+    return (p.type_simple, p.opt_expr)
 
   @_("ARRAY '[' opt_expr ']' type_array_sized")
   def type_array_sized(self, p):
-    return _L(ArrayType(base=p.type_array_sized, size=p.opt_expr), p.lineno)
+    return (p.type_simple, p.opt_expr)
   
   # Function types
   @_("FUNCTION type_simple '(' opt_param_list ')'")
   def type_func(self, p):
-    return _L(FuncType(ret=p.type_simple, params=p.opt_param_list), p.lineno)
+    return (p.type_simple, p.opt_param_list)
 
   @_("FUNCTION type_array_sized '(' opt_param_list ')'")
   def type_func(self, p):
-    return _L(FuncType(ret=p.type_array_sized, params=p.opt_param_list), p.lineno)
+    return (p.type_array_sized[0], p.opt_param_list)
   
   # == Declarations ==
   @_("ID ':' type_simple ';'")
@@ -77,12 +77,20 @@ class Parser(sly.Parser):
 
   @_("ID ':' type_array_sized ';'")
   def decl(self, p):
-    return _L(ArrayDecl(name=p.ID, type=p.type_array_sized), p.lineno)
+    return _L(ArrayDecl(
+      name=p.ID, 
+      base=p.type_array_sized[0], 
+      size=p.type_array_sized[1]
+    ), p.lineno)
 
   @_("ID ':' type_func ';'")
   def decl(self, p):
-    func_type: FuncType = p.type_func
-    return _L(FuncDecl(name=p.ID, type=func_type, body=[]), p.lineno)
+    return _L(FuncDecl(
+      name=p.ID, 
+      type=p.type_func[0],
+      params=p.type_func[1],
+      body=[]
+    ), p.lineno)
   
   # decl_init
   @_("ID ':' type_simple '=' expr ';'")
@@ -91,12 +99,21 @@ class Parser(sly.Parser):
   
   @_("ID ':' type_array_sized '=' '{' opt_expr_list '}' ';'")
   def decl(self, p):
-    return _L(ArrayDecl(name=p.ID, type=p.type_array_sized, value=p.opt_expr_list), p.lineno)
+    return _L(ArrayDecl(
+      name=p.ID, 
+      base=p.type_array_sized[0], 
+      size=p.type_array_sized[1],
+      value=p.opt_expr_list
+    ), p.lineno)
   
   @_("ID ':' type_func '=' '{' opt_stmt_list '}' ';'")
   def decl(self, p):
-    func_type: FuncType = p.type_func
-    return _L(FuncDecl(name=p.ID, type=func_type, body=p.opt_stmt_list), p.lineno)
+    return _L(FuncDecl(
+      name=p.ID, 
+      type=p.type_func[0],
+      params=p.type_func[1],
+      body=p.opt_stmt_list
+    ), p.lineno)
   
   # == Statements ==
   @_("stmt_list")
