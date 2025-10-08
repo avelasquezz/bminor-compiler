@@ -23,7 +23,7 @@ class Lexer(sly.Lexer):
 
   @_(r"[0-9]+[a-zA-Z][a-zA-Z0-9_]*")
   def error_invalid_identifier(self, token):
-    error(f"Illegal identiifer: {token.value}", token.lineno)
+    error(f"Illegal identiifer '{token.value}'", token.lineno, "Lexical")
     self.index += 1
 
   ID = r"[a-zA-Z_][a-zA-Z0-9_]*" 
@@ -97,7 +97,7 @@ class Lexer(sly.Lexer):
     try:
       token.value = unescape_char(inner) 
     except ValueError as err:
-      error(str(err), token.lineno)
+      error(str(err), token.lineno, "Lexical")
       token.value = None
 
     return token
@@ -110,7 +110,7 @@ class Lexer(sly.Lexer):
     return token
   
   def error(self, token):
-    error(f"Illegal character {token.value[0]}", token.lineno)
+    error(f"Illegal character {token.value[0]}", token.lineno, "Lexical")
     self.index += 1
   
 def tokenize(code):
