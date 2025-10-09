@@ -18,7 +18,9 @@ class Check(Visitor):
   
   def visit(self, n: VarDecl, env: Symtab):
     if n.value:
-      if check_binop('=', n.type, n.value.type if hasattr(n.value, "type") else n.value.accept(self, env)) is None:
+      n.value.accept(self, env)
+
+      if check_binop('=', n.type, n.value.type) is None:
         error(f"Types do not match in '{n.name}'", n.lineno, "Semantic")
         
     try:
@@ -27,6 +29,38 @@ class Check(Visitor):
       error(f"'{n.name}' has already been declared with a different type", n.lineno, "Semantic")
     except Symtab.SymbolDefinedError:
       error(f"'{n.name}' has already been declared", n.lineno, "Semantic")
+  
+  def visit(self, n: ArrayDecl, env: Symtab):
+    n.size.accept(self, env)
+
+    if n.size.type != "integer":
+      error(f"Size of '{n.name}' must be an integer", n.lineno, "Semantic")
+    
+    if n.value:
+      for value in n.value:
+        value.accept(self, env)
+
+        if value.type != n.type:
+          error(f"All elements of '{n.name}' must be '{n.type}'", n.lineno, "Semantic")
+          break
+    
+    try:
+      env.add(n.name, n)
+    except Symtab.SymbolConflictError:
+      error(f"'{n.name}' has already been declared with a different type", n.lineno, "Semantic")
+    except Symtab.SymbolDefinedError:
+      error(f"'{n.name}' has already been declared", n.lineno, "Semantic")
+
+  def visit(self, n: VarParam, env: Symtab):
+    try:
+      env.add(n.name, n)
+    except Symtab.SymbolConflictErrorenv.get(n.name):
+      error(f"'{n.name}' has already been declared with a different type", n.lineno, "Semantic")
+    except Symtab.SymbolDefinedError:
+      error(f"'{n.name}' has already been declared", n.lineno, "Semantic")
+  
+  def visit(self, n: ArrayParam, env: Symtab):
+    pass
 
   def visit(self, n: FuncDecl, env: Symtab):
     try:
@@ -38,8 +72,19 @@ class Check(Visitor):
     
     func_env = Symtab(n.name, env)
 
+    for param in n.params:
+      param.accept(self, func_env)
+
     for stmt in n.body:
       stmt.accept(self, func_env)
+  
+  def visit(self, n: UnaryOper, env: Symtab):
+    n.expr.accept(self, env)
+
+    n.type = check_unaryop(n.oper, n.expr.type)
+
+    if n.type is None:
+      error(f"Types do not match in '{n.oper}'", n.lineno, "Semantic")
     
   def visit(self, n: BinOper, env: Symtab):
     n.left.accept(self, env)
@@ -57,15 +102,32 @@ class Check(Visitor):
       n.value.accept(self, env)
 
       if func.type != n.value.type:
-        error(f"Function '{func.name}' returns a different type", n.lineno, "Semantic")
+        error(f"'{func.name}' returns a different type", n.lineno, "Semantic")
+  
+  def visit(self, n: Assignment, env: Symtab):
+    target = env.get(n.target.name)
+
+    if target is not None:
+      n.value.accept(self, env)
+
+      if n.value.type is not None and target.type != n.value.type:
+        error(f"Types do not match in {n.target.name}", n.lineno, "Semantic")
+    else:
+      error(f"'{n.target.name}' is not defined", n.lineno, "Semantic")
     
   def visit(self, n: VarLoc, env: Symtab):
-    n.type = env.get(n.name)
+    symbol = env.get(n.name)
 
-    if n.type is None:
+    if symbol is None:
       error(f"'{n.name}' is not defined", n.lineno, "Semantic")
+    else:
+      if hasattr(symbol, 'type'):
+        n.type = symbol.type
+      else:
+        error(f"'{n.name}' has no type information", n.lineno, "Semantic")
   
   def visit(self, n: Node, env: Symtab):
+    # env.print()
     pass
 
 if __name__ == '__main__':
