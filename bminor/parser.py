@@ -80,7 +80,7 @@ class Parser(sly.Parser):
   def decl(self, p):
     return _L(ArrayDecl(
       name=p.ID, 
-      base=p.type_array_sized[0], 
+      type=p.type_array_sized[0], 
       size=p.type_array_sized[1]
     ), p.lineno)
 
@@ -102,7 +102,7 @@ class Parser(sly.Parser):
   def decl(self, p):
     return _L(ArrayDecl(
       name=p.ID, 
-      base=p.type_array_sized[0], 
+      type=p.type_array_sized[0], 
       size=p.type_array_sized[1],
       value=p.opt_expr_list
     ), p.lineno)
