@@ -2,6 +2,7 @@ import sly
 
 from bminor.lexer import Lexer
 from bminor.model import *
+from bminor.errors import error
 from rich.tree import Tree
 from rich import print
 from dataclasses import is_dataclass, fields
@@ -432,7 +433,7 @@ class Parser(sly.Parser):
   def error(self, p):
     lineno = p.lineno if p else "EOF"
     value = repr(p.value) if p else "EOF"
-    raise SyntaxError(f"Syntax error at {value} (line {lineno})")
+    error(f"{value}", lineno, "Syntax")
 
 def parse(code):
   l = Lexer()
