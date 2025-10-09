@@ -17,7 +17,8 @@ Formatting options:
 import argparse
 import sys
 
-from rich  import print
+from rich import print
+from bminor.errors import errors_detected
 from bminor.lexer import tokenize
 from bminor.parser import parse, ast_to_tree
 from bminor.dot_render import ASTPrinter
@@ -77,16 +78,16 @@ def main():
 
   filename = args.filename
 
-  try:
-    with open(filename, encoding = 'utf-8') as file:
-      source = file.read()
+  with open(filename, encoding = 'utf-8') as file:
+    source = file.read()
 
-      if args.scan:
-        tokenize(source)
-      elif args.dot:
-        print(f"[bold]Source code: [magenta]{filename}[/]\n")
-        ast = parse(source)
-  
+    if args.scan:
+      tokenize(source)
+    elif args.dot:
+      print(f"[bold]Source code: [magenta]{filename}[/]\n")
+      ast = parse(source)
+
+      if errors_detected() < 1:
         tree = ast_to_tree(ast)
         print(tree)
 
@@ -94,9 +95,6 @@ def main():
         dot.render("ast.dot")
 
         print(f"\n[bold]The AST graph as dot format was created as [blue]./ast.dot[/] and it can be viewed in [blue]./ast.dot.pdf[/]\n")
-
-  except:
-    print(f'[red]I/O error:[/red]', file = sys.stderr)
 
 if __name__ == '__main__':
   main()
