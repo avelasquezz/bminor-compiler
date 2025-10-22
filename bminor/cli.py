@@ -22,6 +22,7 @@ from bminor.errors import errors_detected
 from bminor.lexer import tokenize
 from bminor.parser import parse, ast_to_tree
 from bminor.dot_render import ASTPrinter
+from bminor.checker import Check
 
 def usage(exit_code = 1):
   print("[blue]Usage: main.py --option filename[/blue]", file = sys.stderr)
@@ -63,6 +64,13 @@ def parse_args():
     default = False,
     help = 'Generate AST graph as DOT format'
   )
+  mutex.add_argument(
+    '--sym',
+    action='store_true',
+    default=False,
+    help='Dump the symbol table'
+  )
+
 
   return cli.parse_args()
 
@@ -95,6 +103,20 @@ def main():
         dot.render("ast.dot")
 
         print(f"\n[bold]The AST graph as dot format was created as [blue]./ast.dot[/] and it can be viewed in [blue]./ast.dot.pdf[/]\n")
+    elif args.sym:
+      print(f"[bold]Source code: [magenta]{filename}[/]\n")
+
+      try:
+        ast = parse(source)
+      except:
+        pass
+
+      if errors_detected() < 1:
+        env = Check.checker(ast)
+
+        if errors_detected() < 1:    
+          print(f"[bold green]Symbol Tables:[/bold green]")
+          env.print()
 
 if __name__ == '__main__':
   main()
