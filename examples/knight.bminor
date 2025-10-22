@@ -13,7 +13,7 @@ N: integer = 8;       // Tamaño del tablero
 
 index: function integer (r: integer, c:integer) = {
     return r * N + c;
-};
+}
 
 // Función auxiliar para imprimir el tablero
 print_board: function void (board: array [] integer) = {
@@ -28,12 +28,12 @@ print_board: function void (board: array [] integer) = {
         }
         print '\n';
     }
-}; 
+}
 
 // Función auxiliar para validar movtos válidos
-can_move: function boolean (r: integer, c: integer, board: array [] integer) = {
+can_move: function boolean (r, integer, c: integer, board: array [] integer) = {
     return r >= 0 && r < N && c >= 0 && c < N && board[index(r,c)] == 0;
-};
+}
 
 // Función recursiva para que el caballo recorra el tablero
 walk: function boolean (r: integer, c: integer, m: integer, board: array [] integer, xmoves: array [] integer, ymoves: array [] integer) = {
@@ -50,13 +50,13 @@ walk: function boolean (r: integer, c: integer, m: integer, board: array [] inte
         if (can_move(next_x, next_y, board)) {
             board[index(next_x, next_y)] = m;
             if (walk(next_x, next_y, m+1, board, xmoves, ymoves)) {
-                return true;
+                return true
             }
             board[index(next_x, next_y)] = 0;
         }
     }
     return false;
-};
+}
 
 main: function void () = {
     board: array [N*N] integer;
@@ -69,4 +69,4 @@ main: function void () = {
     } else {
         print "No existe solución\n";
     }
-};
+}
