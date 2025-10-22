@@ -1,6 +1,5 @@
 sly
 rich
-pytest
 argparse
 graphviz
 multimethod
