@@ -34,7 +34,7 @@ class Program(Statement):
 @dataclass
 class Param(Expression):
   name: str
-  type: Expression
+  type: str 
 
 @dataclass
 class VarParam(Param):
@@ -55,8 +55,8 @@ class VarDecl(Declaration):
 @dataclass
 class ArrayDecl(Declaration):
   name: str
-  base: str
-  size: Expression = None
+  type: str
+  size: Expression 
   value: List[Expression] = field(default_factory = list)
 
 @dataclass
