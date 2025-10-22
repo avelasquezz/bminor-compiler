@@ -60,7 +60,7 @@ class Parser(sly.Parser):
 
   @_("ARRAY '[' opt_expr ']' type_array_sized")
   def type_array_sized(self, p):
-    return (p.type_simple, p.opt_expr)
+    return (p.type_array_sized, p.opt_expr)
   
   # Function types
   @_("FUNCTION type_simple '(' opt_param_list ')'")
@@ -424,7 +424,7 @@ class Parser(sly.Parser):
 
   @_("ID ':' type_array_sized")
   def param(self, p):
-    return _L(ArrayParam(name=p.ID, type=p.type_array_sized, size=p.type_array_sized.size), p.lineno)
+    return _L(ArrayParam(name=p.ID, type=p.type_array_sized[0], size=p.type_array_sized[1]), p.lineno)
 
   @_("")
   def empty(self, p):
