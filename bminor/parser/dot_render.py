@@ -1,5 +1,6 @@
-from graphviz import Digraph
 from bminor.parser.model import *
+
+from graphviz import Digraph
 
 class ASTPrinter(Visitor):
   node_defaults = {

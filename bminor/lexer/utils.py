@@ -1,13 +1,13 @@
 def unescape_char(char):
   # Converts the content of a CHAR_LITERAL into a single character.
   escapes = {
-    "n": "\n",
-    "t": "\t",
-    "r": "\r",
-    "\\": "\\",
-    "'": "'",
-    '"': '"',
-    "0": "\0"
+    "n"  : "\n",
+    "t"  : "\t",
+    "r"  : "\r",
+    "\\" : "\\",
+    "'"  : "'",
+    '"'  : '"',
+    "0"  : "\0"
   }
 
   # A character without escape

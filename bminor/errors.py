@@ -1,7 +1,7 @@
 # Errors management for B-Minor language
 
-from rich import print 
 from rich.markup import escape
+from rich        import print 
 
 _errors_detected = 0
 

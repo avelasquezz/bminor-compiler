@@ -1,7 +1,8 @@
-from rich.table import Table
-from rich.console import Console
-from rich import print
 from bminor.parser.model import Node
+
+from rich.console import Console
+from rich.table 	import Table
+from rich 		    import print
 
 class Symtab:
 	class SymbolDefinedError(Exception):

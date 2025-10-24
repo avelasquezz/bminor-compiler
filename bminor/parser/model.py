@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from typing import List, Union
 from multimethod import multimeta 
+from typing      import List, Union
 
 class Visitor(metaclass = multimeta):
   pass

@@ -1,11 +1,12 @@
 import sly
 
-from bminor.lexer.lexer import Lexer
 from bminor.parser.model import *
-from bminor.errors import error
-from rich.tree import Tree
-from rich import print
+from bminor.lexer.lexer  import Lexer
+from bminor.errors       import error
+
 from dataclasses import is_dataclass, fields
+from rich.tree   import Tree
+from rich        import print
 
 def _L(node, lineno):
   node.lineno = lineno

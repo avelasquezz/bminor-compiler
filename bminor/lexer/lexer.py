@@ -1,9 +1,10 @@
 import sly
 
-from bminor.errors import error, errors_detected
-from rich.table import Table
-from rich.console import Console 
 from bminor.lexer.utils import unescape_char, unescape_string
+from bminor.errors      import error, errors_detected
+
+from rich.console import Console 
+from rich.table   import Table
 
 class Lexer(sly.Lexer):
   tokens = {
@@ -28,42 +29,42 @@ class Lexer(sly.Lexer):
 
   ID = r"[a-zA-Z_][a-zA-Z0-9_]*" 
 
-  ID['array'] = "ARRAY"
-  ID['auto'] = "AUTO"
-  ID['boolean'] = "BOOLEAN"
-  ID['char'] = "CHAR"
-  ID['do'] = "DO"
-  ID['else'] = "ELSE"
-  ID['false'] = "FALSE"
-  ID['float'] = "FLOAT"
-  ID['for'] = "FOR"
+  ID['array']    = "ARRAY"
+  ID['auto']     = "AUTO"
+  ID['boolean']  = "BOOLEAN"
+  ID['char']     = "CHAR"
+  ID['do']       = "DO"
+  ID['else']     = "ELSE"
+  ID['false']    = "FALSE"
+  ID['float']    = "FLOAT"
+  ID['for']      = "FOR"
   ID['function'] = "FUNCTION"
-  ID['if'] = "IF"
-  ID['integer'] = "INTEGER"
-  ID['print'] = "PRINT"
-  ID['return'] = "RETURN"
-  ID['string'] = "STRING"
-  ID['true'] = "TRUE"
-  ID['void'] = "VOID"
-  ID['while'] = "WHILE"
+  ID['if']       = "IF"
+  ID['integer']  = "INTEGER"
+  ID['print']    = "PRINT"
+  ID['return']   = "RETURN"
+  ID['string']   = "STRING"
+  ID['true']     = "TRUE"
+  ID['void']     = "VOID"
+  ID['while']    = "WHILE"
 
-  FLOAT_LITERAL = r"[0-9]*\.[0-9]+"
+  FLOAT_LITERAL   = r"[0-9]*\.[0-9]+"
   INTEGER_LITERAL = r"[0-9]+"
-  CHAR_LITERAL = r"'([\x20-\x7E]|\\([abefnrtv\\'\"]|0x[0-9a-fA-F]{2}))'" 
-  STRING_LITERAL = r"\"([^\"\\]|\\.)*\""
+  CHAR_LITERAL    = r"'([\x20-\x7E]|\\([abefnrtv\\'\"]|0x[0-9a-fA-F]{2}))'" 
+  STRING_LITERAL  = r"\"([^\"\\]|\\.)*\""
 
   # Relational operators
   NOT = r"!"
-  LE = r"<=" 
-  GE = r">="
-  LT = r"<"
-  GT = r">"
-  NE = r"!="
-  EQ = r"=="
+  LE  = r"<=" 
+  GE  = r">="
+  LT  = r"<"
+  GT  = r">"
+  NE  = r"!="
+  EQ  = r"=="
 
   # Logical operators
   LAND = r"&&"
-  LOR = r"\|\|"
+  LOR  = r"\|\|"
   
   INC = r"\+\+"
   DEC = r"\-\-"

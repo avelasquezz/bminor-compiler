@@ -53,9 +53,9 @@ _bin_ops = {
 	('char', '!=', 'char') : 'boolean',
 
 	# Strings
-	('string', '+', 'string')  : 'string',		# Concatenate 
+	('string', '+', 'string') : 'string',		# Concatenate 
 
-	('string', '=', 'string')  : 'string',
+	('string', '=', 'string') : 'string',
 
 	('string', '<', 'string')  : 'boolean',
 	('string', '<=', 'string') : 'boolean',
