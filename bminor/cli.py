@@ -19,10 +19,10 @@ import sys
 
 from rich import print
 from bminor.errors import errors_detected
-from bminor.lexer import tokenize
-from bminor.parser import parse, ast_to_tree
-from bminor.dot_render import ASTPrinter
-from bminor.checker import Check
+from bminor.lexer.lexer import tokenize
+from bminor.parser.parser import parse, ast_to_tree
+from bminor.parser.dot_render import ASTPrinter
+from bminor.semantic.checker import Check
 
 def usage(exit_code = 1):
   print("[blue]Usage: main.py --option filename[/blue]", file = sys.stderr)

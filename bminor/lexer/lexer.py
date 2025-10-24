@@ -3,7 +3,7 @@ import sly
 from bminor.errors import error, errors_detected
 from rich.table import Table
 from rich.console import Console 
-from bminor.utils import unescape_char, unescape_string
+from bminor.lexer.utils import unescape_char, unescape_string
 
 class Lexer(sly.Lexer):
   tokens = {

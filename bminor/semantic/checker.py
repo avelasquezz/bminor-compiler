@@ -1,9 +1,9 @@
 from rich import print
 from typing import Union, List
 from bminor.errors import error, errors_detected
-from bminor.model import *
-from bminor.symtab import Symtab
-from bminor.typesys import typenames, check_binop, check_unaryop, CheckError
+from bminor.parser.model import *
+from bminor.semantic.symtab import Symtab
+from bminor.semantic.typesys import typenames, check_binop, check_unaryop, CheckError
 
 if_counter = 0
 while_counter = 0

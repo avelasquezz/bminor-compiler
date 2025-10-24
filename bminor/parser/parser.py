@@ -1,7 +1,7 @@
 import sly
 
-from bminor.lexer import Lexer
-from bminor.model import *
+from bminor.lexer.lexer import Lexer
+from bminor.parser.model import *
 from bminor.errors import error
 from rich.tree import Tree
 from rich import print
