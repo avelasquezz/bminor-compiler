@@ -54,7 +54,6 @@ class Parser(sly.Parser):
   def type_simple(self, p):
     return "void" 
   
-  # Array types (solo con tamaño opcional)
   @_("ARRAY '[' opt_expr ']' type_simple")
   def type_array_sized(self, p):
     return (p.type_simple, p.opt_expr)
@@ -94,7 +93,6 @@ class Parser(sly.Parser):
       body=[]
     ), p.lineno)
   
-  # decl_init
   @_("ID ':' type_simple '=' expr ';'")
   def decl(self, p):
     return _L(VarDecl(name=p.ID, type=p.type_simple, value=p.expr), p.lineno)
@@ -205,7 +203,6 @@ class Parser(sly.Parser):
     init, condition, incr = p.for_header
     return _L(ForStmt(init=init, condition=condition, incr=incr, body=p.closed_stmt), p.lineno)
   
-  # simple_stmt
   @_("print_stmt")
   @_("return_stmt")
   @_("block_stmt")

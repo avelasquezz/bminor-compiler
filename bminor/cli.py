@@ -72,7 +72,6 @@ def parse_args():
     help='Dump the symbol table'
   )
 
-
   return cli.parse_args()
 
 def main():

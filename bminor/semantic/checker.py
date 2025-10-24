@@ -234,8 +234,6 @@ class Check(Visitor):
     else:
       error("'if' must have a boolean condition", n.lineno, "Semantic")
 
-
-
     if_env = Symtab(name, env)
     if_counter += 1
 

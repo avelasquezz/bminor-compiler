@@ -1,5 +1,3 @@
-# Errors management for B-Minor language
-
 from rich.markup import escape
 from rich        import print 
 
