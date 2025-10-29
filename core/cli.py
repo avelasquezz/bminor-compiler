@@ -17,11 +17,11 @@ Formatting options:
 import argparse
 import sys
 
-from bminor.parser.dot_render import ASTPrinter
-from bminor.semantic.checker  import Check
-from bminor.parser.parser     import parse, ast_to_tree
-from bminor.lexer.lexer       import tokenize
-from bminor.errors            import errors_detected
+from core.parser.dot_render import ASTPrinter
+from core.semantic.checker  import Check
+from core.parser.parser     import parse, ast_to_tree
+from core.lexer.lexer       import tokenize
+from core.errors            import errors_detected
 
 from rich import print
 

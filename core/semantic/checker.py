@@ -1,7 +1,7 @@
-from bminor.semantic.typesys import typenames, check_binop, check_unaryop, CheckError
-from bminor.semantic.symtab  import Symtab
-from bminor.parser.model     import *
-from bminor.errors           import error, errors_detected
+from core.semantic.typesys import typenames, check_binop, check_unaryop, CheckError
+from core.semantic.symtab  import Symtab
+from core.parser.model     import *
+from core.errors           import error, errors_detected
 
 from typing import Union, List
 from rich   import print

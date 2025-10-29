@@ -1,4 +1,4 @@
-from bminor.parser.model import Node
+from core.parser.model import Node
 
 from rich.console import Console
 from rich.table 	import Table

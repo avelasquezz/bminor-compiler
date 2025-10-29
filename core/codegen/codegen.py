@@ -1,5 +1,5 @@
 from llvmlite import ir
-from bminor.parser.model import Visitor
+from core.parser.model import Visitor
 
 class CodeGenerator(Visitor):
     def __init__(self):

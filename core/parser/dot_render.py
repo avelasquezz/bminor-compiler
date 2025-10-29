@@ -1,4 +1,4 @@
-from bminor.parser.model import *
+from core.parser.model import *
 
 from graphviz import Digraph
 

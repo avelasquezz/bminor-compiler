@@ -1,7 +1,7 @@
 import sly
 
-from bminor.lexer.utils import unescape_char, unescape_string
-from bminor.errors      import error, errors_detected
+from core.lexer.utils import unescape_char, unescape_string
+from core.errors      import error, errors_detected
 
 from rich.console import Console 
 from rich.table   import Table

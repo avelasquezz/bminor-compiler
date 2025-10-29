@@ -1,8 +1,8 @@
 import sly
 
-from bminor.parser.model import *
-from bminor.lexer.lexer  import Lexer
-from bminor.errors       import error
+from core.parser.model import *
+from core.lexer.lexer  import Lexer
+from core.errors       import error
 
 from dataclasses import is_dataclass, fields
 from rich.tree   import Tree
