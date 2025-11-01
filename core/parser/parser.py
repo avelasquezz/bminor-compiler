@@ -140,38 +140,23 @@ class Parser(sly.Parser):
 
   @_("if_stmt_closed")
   @_("for_stmt_closed")
-  @_("while_stmt_closed")
-  @_("do_while_stmt_closed")
+  @_("while_stmt")
+  @_("do_while_stmt")
   @_("simple_stmt")
   def closed_stmt(self, p):
     return p[0]
 
   @_("if_stmt_open")
-  @_("for_stmt_open")
-  @_("while_stmt_open")
-  @_("do_while_stmt_open")
   def open_stmt(self, p):
     return p[0]
 
-  @_("WHILE '(' opt_expr ')'")
-  def while_cond(self, p):
-    return p.opt_expr
-  
-  @_("while_cond closed_stmt")
-  def while_stmt_closed(self, p):
-    return _L(WhileStmt(condition=p.while_cond, body=p.close_stmt), p.lineno)
+  @_("WHILE '(' opt_expr ')' stmt")
+  def while_stmt(self, p):
+    return _L(WhileStmt(condition=p.opt_expr, body=p.stmt), p.lineno)
 
-  @_("while_cond stmt")
-  def while_stmt_open(self, p):
-    return _L(WhileStmt(condition=p.while_cond, body=p.stmt), p.lineno)
-
-  @_("DO closed_stmt while_cond")
-  def do_while_stmt_closed(self, p):
-    return _L(DoWhileStmt(body=p.closed_stmt, condition=p.while_cond), p.lineno)
-
-  @_("DO stmt while_cond")
-  def do_while_stmt_open(self, p):
-    return _L(DoWhileStmt(body=p.stmt, condition=p.while_cond), p.lineno)
+  @_("DO stmt WHILE '(' opt_expr ')' ';'")
+  def do_while_stmt(self, p):
+    return _L(DoWhileStmt(body=p.stmt, condition=p.opt_expr), p.lineno)
   
   @_("IF '(' opt_expr ')'")
   def if_cond(self, p):
@@ -193,11 +178,6 @@ class Parser(sly.Parser):
   def for_header(self, p):
     return (p.opt_expr0, p.opt_expr1, p.opt_expr2)
   
-  @_("for_header open_stmt")
-  def for_stmt_open(self, p):
-    init, condition, incr = p.for_header
-    return _L(ForStmt(init=init, condition=condition, incr=incr, body=p.open_stmt), p.lineno)
-
   @_("for_header closed_stmt")
   def for_stmt_closed(self, p):
     init, condition, incr = p.for_header
