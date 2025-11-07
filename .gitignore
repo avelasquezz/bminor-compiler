@@ -1,5 +1,2 @@
 __pycache__/
-*.dot
-*.dot.pdf
-tests/
-requirements-dev.txt
+out/
