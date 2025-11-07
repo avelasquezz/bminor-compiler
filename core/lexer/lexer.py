@@ -9,9 +9,9 @@ from rich.table   import Table
 class Lexer(sly.Lexer):
   tokens = {
     # Reserved words
-    "ARRAY", "AUTO", "BOOLEAN", "CHAR", "ELSE", "FALSE", 
-    "FLOAT", "FOR", "FUNCTION", "IF", "INTEGER", "PRINT", 
-    "RETURN", "STRING", "TRUE", "VOID", "WHILE", "DO",
+    "ARRAY", "BOOLEAN", "CHAR", "ELSE", "FALSE", "FLOAT", 
+    "FOR", "FUNCTION", "IF", "INTEGER", "PRINT", "RETURN", 
+    "STRING", "TRUE", "VOID", "WHILE", "DO",
 
     # Operators
     "NOT", "LT", "LE", "GT", "GE", "EQ", "NE", "LAND", "LOR", "INC", "DEC",
@@ -30,7 +30,6 @@ class Lexer(sly.Lexer):
   ID = r"[a-zA-Z_][a-zA-Z0-9_]*" 
 
   ID['array']    = "ARRAY"
-  ID['auto']     = "AUTO"
   ID['boolean']  = "BOOLEAN"
   ID['char']     = "CHAR"
   ID['do']       = "DO"
