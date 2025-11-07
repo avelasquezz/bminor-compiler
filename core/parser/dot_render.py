@@ -258,13 +258,3 @@ class ASTPrinter(Visitor):
       self.dot.edge(name, arg.accept(self))
 
     return name
-
-  def visit(self, n: Node):
-    name = self.name
-    print(n.__class__.__name__)
-    self.dot.node(name, label=n.__class__.__name__)
-
-    for child in getattr(n, "children", []):
-        self.dot.edge(name, child.accept(self))
-
-    return name
