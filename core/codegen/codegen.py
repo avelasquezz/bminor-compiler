@@ -102,19 +102,3 @@ class CodeGenerator(Visitor):
   def visit(self, node: ReturnStmt):
     retval = node.value.accept(self)
     self.builder.ret(retval)
-
-if __name__ == '__main__':
-  import sys
-
-  from core.parser.parser import parse
-
-  if len(sys.argv) != 2:
-	  raise SystemExit("Usage: python dotrender.py <filename>")
-
-  txt = open(sys.argv[1], encoding='utf-8').read()
-  ast = parse(txt)
-  
-  cg = CodeGenerator()
-  cg.visit(ast)
-
-  print(cg.module)
