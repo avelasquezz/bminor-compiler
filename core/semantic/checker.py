@@ -310,7 +310,6 @@ class Check(Visitor):
   def visit(self, n: PrintStmt, env: Symtab):
     for v in n.value:
       v.accept(self, env)
-
-  def visit(self, n: Node, env: Symtab):
-    # print(f"Node '{n.__class__.__name__}' not implemented")
+    
+  def visit(self, n: Literal, env: Symtab):
     pass
