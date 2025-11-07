@@ -314,15 +314,3 @@ class Check(Visitor):
   def visit(self, n: Node, env: Symtab):
     # print(f"Node '{n.__class__.__name__}' not implemented")
     pass
-
-if __name__ == '__main__':
-  import sys
-  from bminor.parser import parse
-
-  if len(sys.argv) != 2:
-	  raise SystemExit("Usage: python checker.py <filename>")
-
-  code = open(sys.argv[1], encoding='utf-8').read()
-  ast = parse(code)
-
-  Check.checker(ast)
