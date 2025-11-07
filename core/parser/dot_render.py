@@ -268,16 +268,3 @@ class ASTPrinter(Visitor):
         self.dot.edge(name, child.accept(self))
 
     return name
-
-if __name__ == '__main__':
-  import sys
-  from bminor.parser import parse
-
-  if len(sys.argv) != 2:
-	  raise SystemExit("Usage: python dotrender.py <filename>")
-
-  txt = open(sys.argv[1], encoding='utf-8').read()
-  ast = parse(txt)
-  
-  dot = ASTPrinter.render(ast)
-  dot.render("ast.dot")

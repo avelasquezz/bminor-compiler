@@ -1,4 +1,3 @@
-# bminor.py
 '''
 usage: main.py [-h] [-v] [--scan | --dot | --sym] [filename]
 
