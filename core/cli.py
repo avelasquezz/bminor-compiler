@@ -16,6 +16,7 @@ Formatting options:
 '''
 import argparse
 import sys
+import os
 
 from core.parser.dot_render import ASTPrinter
 from core.semantic.checker  import Check
@@ -100,9 +101,11 @@ def main():
         print(tree)
 
         dot = ASTPrinter.render(ast)
-        dot.render("ast.dot")
+        output_path = os.path.join("out", "ast")
+        dot.render(filename=output_path, format="pdf", cleanup=True)
+        dot.render(filename=output_path, format="dot", cleanup=True)
 
-        print(f"\n[bold]The AST graph as dot format was created as [blue]./ast.dot[/] and it can be viewed in [blue]./ast.dot.pdf[/]\n")
+        print(f"\n[bold]The AST graph as dot format was created as [blue]./out/ast.dot[/] and it can be viewed in [blue]./out/ast.pdf[/]\n")
     elif args.sym:
       print(f"[bold]Source code: [magenta]{filename}[/]\n")
 
