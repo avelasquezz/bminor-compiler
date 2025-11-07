@@ -132,47 +132,38 @@ class Parser(sly.Parser):
   def stmt_list(self, p):
     return [p.stmt]
   
-  @_("closed_stmt")
   @_("decl")
-  def stmt(self, p):
-    return p[0]
-
+  @_("simple_stmt")
+  @_("block_stmt")
   @_("if_stmt")
   @_("for_stmt")
   @_("while_stmt")
   @_("do_while_stmt")
-  @_("simple_stmt")
-  def closed_stmt(self, p):
+  def stmt(self, p):
     return p[0]
 
-  @_("IF '(' opt_expr ')'")
-  def if_cond(self, p):
-    return p.opt_expr
-  
-  @_("if_cond closed_stmt ELSE closed_stmt")
+  @_("IF '(' opt_expr ')' block_stmt ELSE block_stmt")
   def if_stmt(self, p):
-    return _L(IfStmt(condition=p.if_cond, then_branch=p[1], else_branch=p[3]), p.lineno)
+    return _L(IfStmt(condition=p.opt_expr, then_branch=p.block_stmt0, else_branch=p.block_stmt1), p.lineno)
 
-  @_("FOR '(' opt_expr ';' opt_expr ';' opt_expr ')'")
-  def for_header(self, p):
-    return (p.opt_expr0, p.opt_expr1, p.opt_expr2)
-  
-  @_("for_header closed_stmt")
+  @_("IF '(' opt_expr ')' block_stmt")
+  def if_stmt(self, p):
+    return _L(IfStmt(condition=p.opt_expr, then_branch=p.block_stmt), p.lineno)
+
+  @_("FOR '(' opt_expr ';' opt_expr ';' opt_expr ')' block_stmt")
   def for_stmt(self, p):
-    init, condition, incr = p.for_header
-    return _L(ForStmt(init=init, condition=condition, incr=incr, body=p.closed_stmt), p.lineno)
+    return _L(ForStmt(init=p.opt_expr0, condition=p.opt_expr1, incr=p.opt_expr2, body=p.block_stmt), p.lineno)
 
-  @_("WHILE '(' opt_expr ')' stmt")
+  @_("WHILE '(' opt_expr ')' block_stmt")
   def while_stmt(self, p):
-    return _L(WhileStmt(condition=p.opt_expr, body=p.stmt), p.lineno)
+    return _L(WhileStmt(condition=p.opt_expr, body=p.block_stmt), p.lineno)
 
-  @_("DO stmt WHILE '(' opt_expr ')' ';'")
+  @_("DO block_stmt WHILE '(' opt_expr ')' ';'")
   def do_while_stmt(self, p):
-    return _L(DoWhileStmt(body=p.stmt, condition=p.opt_expr), p.lineno)
+    return _L(DoWhileStmt(body=p.block_stmt, condition=p.opt_expr), p.lineno)
   
   @_("print_stmt")
   @_("return_stmt")
-  @_("block_stmt")
   @_("expr ';'")
   def simple_stmt(self, p):
     return p[0]
@@ -218,29 +209,25 @@ class Parser(sly.Parser):
   def expr(self, p):
     return p.expr1
 
-  @_('lval INC')
-  def expr(self, p):
-    return _L(UnaryOper(oper="++", expr=p.lval), p.lineno)
-
-  @_('lval DEC')
-  def expr(self, p):
-    return _L(UnaryOper(oper="--", expr=p.lval), p.lineno)
-
-  @_('INC lval')
-  def expr(self, p):
-    return _L(UnaryOper(oper="++", expr=p.lval), p.lineno)
-
-  @_('DEC lval')
-  def expr(self, p):
-    return _L(UnaryOper(oper="--", expr=p.lval), p.lineno)
-
-  @_("ID '[' expr ']'")
-  def expr(self, p):
-    return _L(ArrayLoc(name=p.ID, index=p.expr), p.lineno)
-
   @_("lval '=' expr1")
   def expr1(self, p):
     return _L(Assignment(target=p.lval, value=p.expr1), p.lineno)
+
+  @_('lval INC')
+  def expr1(self, p):
+    return _L(UnaryOper(oper="++", expr=p.lval), p.lineno)
+
+  @_('lval DEC')
+  def expr1(self, p):
+    return _L(UnaryOper(oper="--", expr=p.lval), p.lineno)
+
+  @_('INC lval')
+  def expr1(self, p):
+    return _L(UnaryOper(oper="++", expr=p.lval), p.lineno)
+
+  @_('DEC lval')
+  def expr1(self, p):
+    return _L(UnaryOper(oper="--", expr=p.lval), p.lineno)
   
   @_("expr2")
   def expr1(self, p):
@@ -327,13 +314,9 @@ class Parser(sly.Parser):
   def expr9(self, p):
     return _L(FuncCall(name=p.ID, args=p.opt_expr_list), p.lineno)
 
-  @_("ID")
+  @_("lval") 
   def expr9(self, p):
-    return _L(VarLoc(name=p.ID), p.lineno)
-
-  @_("ID '[' expr ']'")
-  def expr9(self, p):
-    return _L(ArrayLoc(name=p.ID, index=p.expr), p.lineno)
+    return p.lval
 
   # == Literals ==
   @_("INTEGER_LITERAL")
