@@ -19,6 +19,7 @@ import os
 
 from core.parser.dot_render import ASTPrinter
 from core.semantic.checker  import Check
+from core.codegen.codegen   import CodeGenerator
 from core.parser.parser     import parse, ast_to_tree
 from core.lexer.lexer       import tokenize
 from core.errors            import errors_detected
@@ -119,6 +120,20 @@ def main():
         if errors_detected() < 1:    
           print(f"[bold green]Symbol Tables:[/bold green]")
           env.print()
+    else:
+      try:
+        ast = parse(source)
+      except:
+        pass
+        
+      if errors_detected() < 1:
+        env = Check.checker(ast)
+
+        if errors_detected() < 1:    
+          cg = CodeGenerator()
+          cg.visit(ast)
+
+          print(cg.module)
 
 if __name__ == '__main__':
   main()
