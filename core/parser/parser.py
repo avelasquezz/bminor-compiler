@@ -132,23 +132,35 @@ class Parser(sly.Parser):
   def stmt_list(self, p):
     return [p.stmt]
   
-  @_("open_stmt")
   @_("closed_stmt")
   @_("decl")
   def stmt(self, p):
     return p[0]
 
-  @_("if_stmt_closed")
-  @_("for_stmt_closed")
+  @_("if_stmt")
+  @_("for_stmt")
   @_("while_stmt")
   @_("do_while_stmt")
   @_("simple_stmt")
   def closed_stmt(self, p):
     return p[0]
 
-  @_("if_stmt_open")
-  def open_stmt(self, p):
-    return p[0]
+  @_("IF '(' opt_expr ')'")
+  def if_cond(self, p):
+    return p.opt_expr
+  
+  @_("if_cond closed_stmt ELSE closed_stmt")
+  def if_stmt(self, p):
+    return _L(IfStmt(condition=p.if_cond, then_branch=p[1], else_branch=p[3]), p.lineno)
+
+  @_("FOR '(' opt_expr ';' opt_expr ';' opt_expr ')'")
+  def for_header(self, p):
+    return (p.opt_expr0, p.opt_expr1, p.opt_expr2)
+  
+  @_("for_header closed_stmt")
+  def for_stmt(self, p):
+    init, condition, incr = p.for_header
+    return _L(ForStmt(init=init, condition=condition, incr=incr, body=p.closed_stmt), p.lineno)
 
   @_("WHILE '(' opt_expr ')' stmt")
   def while_stmt(self, p):
@@ -157,31 +169,6 @@ class Parser(sly.Parser):
   @_("DO stmt WHILE '(' opt_expr ')' ';'")
   def do_while_stmt(self, p):
     return _L(DoWhileStmt(body=p.stmt, condition=p.opt_expr), p.lineno)
-  
-  @_("IF '(' opt_expr ')'")
-  def if_cond(self, p):
-    return p.opt_expr
-  
-  @_("if_cond closed_stmt ELSE closed_stmt")
-  def if_stmt_closed(self, p):
-    return _L(IfStmt(condition=p.if_cond, then_branch=p[1], else_branch=p[3]), p.lineno)
-  
-  @_("if_cond stmt")
-  def if_stmt_open(self, p):
-    return _L(IfStmt(condition=p.if_cond, then_branch=p.stmt), p.lineno)
-  
-  @_("if_cond closed_stmt ELSE if_stmt_open")
-  def if_stmt_open(self, p):
-    return _L(IfStmt(condition=p.if_cond, then_branch=p[1], else_branch=p[3]), p.lineno)
-  
-  @_("FOR '(' opt_expr ';' opt_expr ';' opt_expr ')'")
-  def for_header(self, p):
-    return (p.opt_expr0, p.opt_expr1, p.opt_expr2)
-  
-  @_("for_header closed_stmt")
-  def for_stmt_closed(self, p):
-    init, condition, incr = p.for_header
-    return _L(ForStmt(init=init, condition=condition, incr=incr, body=p.closed_stmt), p.lineno)
   
   @_("print_stmt")
   @_("return_stmt")
