@@ -195,6 +195,19 @@ class ASTPrinter(Visitor):
 
     return name
 
+  def visit(self, n: DoWhileStmt):
+    name = self.name
+
+    self.dot.node(name, label=f"DoWhileStmt")
+
+    if n.body:
+      self.dot.edge(name, n.body.accept(self))
+
+    if n.condition:
+      self.dot.edge(name, n.condition.accept(self))
+
+    return name
+
   def visit(self, n: ForStmt):
     name = self.name
 
