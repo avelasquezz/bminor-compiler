@@ -38,7 +38,7 @@ class CodeGenerator(Visitor):
       global_var.initializer = node.value.accept(self) if node.value else ir.Constant(ty, None)
       self.symbols[node.name] = global_var
       return
-
+    
     ptr = self.builder.alloca(ty, name=node.name)
     self.symbols[node.name] = ptr
 
@@ -93,11 +93,8 @@ class CodeGenerator(Visitor):
     for decl in node.body:
       decl.accept(self)
 
-    if not self.builder.block.is_terminated:
-      if ty == void_type:
-        self.builder.ret_void()
-      else:
-        self.builder.ret(ir.Constant(ty, 0))
+    if ty == void_type:
+      self.builder.ret_void()
   
   def visit(self, node: ReturnStmt):
     retval = node.value.accept(self)
