@@ -1,0 +1,12 @@
+sum: function integer (n: integer) = {
+  result: integer = 0;
+  counter: integer;
+  for (counter = 1; counter <= n; counter++) {
+    result = result + counter;
+  }
+  return result;
+};
+
+main: function void () = {
+  print(sum(100));
+};
