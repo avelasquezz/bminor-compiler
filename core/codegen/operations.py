@@ -6,7 +6,7 @@ bool_type  = ir.IntType(1)
 char_type  = ir.IntType(8)
 void_type  = ir.VoidType()
 
-def operation(left, right, oper, builder):
+def binary_operation(left, right, oper, builder):
   if left.type == int_type and right.type == int_type:
     match oper:
       case "+":  return builder.add(left, right)
@@ -25,7 +25,7 @@ def operation(left, right, oper, builder):
       case "+":  return builder.fadd(left, right)
       case "-":  return builder.fsub(left, right)
       case "*":  return builder.fmul(left, right)
-      case "/":  return builder.fsdiv(left, right)
+      case "/":  return builder.fdiv(left, right)
       case "<":  return builder.fcmp_ordered("<", left, right)
       case "<=": return builder.fcmp_ordered("<=", left, right)
       case ">":  return builder.fcmp_ordered(">", left, right)
@@ -46,3 +46,18 @@ def operation(left, right, oper, builder):
       case ">=": return builder.icmp_signed(">=", left, right)
       case "==": return builder.icmp_signed("==", left, right)
       case "!=": return builder.icmp_signed("!=", left, right)
+  
+def unary_operation(expr, oper, builder):
+  if expr.type == int_type:
+    match oper:
+      case "+":  return builder.add(expr, ir.Constant(int_type, 0))
+      case "-":  return builder.sub(ir.Constant(int_type, 0), expr)
+      case "++": return builder.add(expr, ir.Constant(int_type, 1))
+      case "--": return builder.sub(expr, ir.Constant(int_type, 1))
+  elif expr.type == float_type:
+    match oper:
+      case "+": return builder.fadd(expr, ir.Constant(float_type, 0))
+      case "-": return builder.fsub(ir.Constant(float_type, 0), expr)
+  elif expr.type == bool_type:
+    match oper:
+      case "!": return builder.xor(expr, ir.Constant(bool_type, 1))
